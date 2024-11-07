@@ -1,7 +1,9 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:1234@localhost:3306/cadastroprodutos'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -36,4 +38,4 @@ def get_lojas():
     return jsonify([loja.to_dict() for loja in lojas])
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host='127.0.0.1', port=5000)
