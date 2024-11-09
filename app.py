@@ -26,6 +26,16 @@ class Loja(db.Model):
     
     def to_dict(self):
         return {"id_serial": self.id_serial, "descricao": self.descricao}
+    
+class ProdutoLoja(db.Model):
+    __tablename__ = 'produtoloja'
+    id_serial = db.Column(db.Integer, primary_key=True)
+    idProduto = db.Column(db.Integer, nullable=True)
+    idLoja = db.Column(db.Integer, nullable=True)
+    precoVenda = db.Column(db.Float, nullable=False)
+    
+    def to_dict(self):
+        return {"id_serial": self.id_serial, "idProduto": self.idProduto, "idLoja": self.idLoja, "precoVenda": self.precoVenda}
 
 @app.route('/produtos', methods=['GET'])
 def get_produtos():
@@ -78,6 +88,11 @@ def deletar_produto(id_serial):
 def get_lojas():
     lojas = Loja.query.all()
     return jsonify([loja.to_dict() for loja in lojas])
+
+@app.route('/produto_lojas/<int:idProduto>', methods=['GET'])
+def get_produto_lojas(idProduto):
+    produto_lojas = ProdutoLoja.query.filter_by(idProduto=idProduto).all()
+    return jsonify([produto_loja.to_dict() for produto_loja in produto_lojas])
 
 if __name__ == "__main__":
     app.run(debug=True, host='127.0.0.1', port=5000)
